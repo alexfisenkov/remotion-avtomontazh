@@ -1,0 +1,629 @@
+{
+ "$schema": "библиотека-звуков/v1",
+ "источник": "@remotion/sfx 4.0.513 (remotion.media), пики нормализованы автором пакета к -3 дБFS; синтезированные звуки (категория «синтез») — свои, CC0, генератор tools/синтез-звуков.sh",
+ "note": "Раздел «правила» заполняется из разведки по звуковому дизайну. Паспорта звуков сняты ffmpeg на этой машине: длительность, пик, средний уровень, распределение энергии по третям и вычисленный из него характер атаки.",
+ "звуки": {
+  "animeWow": {
+   "file": "anime-wow.wav",
+   "duration": 4.18,
+   "peak_db": -3.0,
+   "mean_db": -20.5,
+   "thirds_db": [
+    -16.2,
+    -25.6,
+    -41.6
+   ],
+   "attack": "удар",
+   "category": "джингл"
+  },
+  "boneCrack": {
+   "file": "bone-crack.wav",
+   "duration": 1.07,
+   "peak_db": -3.0,
+   "mean_db": -25.5,
+   "thirds_db": [
+    -20.9,
+    -34.9,
+    -43.8
+   ],
+   "attack": "удар",
+   "category": "акцент"
+  },
+  "bruh": {
+   "file": "bruh.wav",
+   "duration": 0.63,
+   "peak_db": -3.0,
+   "mean_db": -16.3,
+   "thirds_db": [
+    -13.6,
+    -15.7,
+    -39.2
+   ],
+   "attack": "удар",
+   "category": "акцент"
+  },
+  "ding": {
+   "file": "ding.wav",
+   "duration": 1.4,
+   "peak_db": -3.0,
+   "mean_db": -19.1,
+   "thirds_db": [
+    -15.1,
+    -22.3,
+    -38.4
+   ],
+   "attack": "удар",
+   "category": "рабочий"
+  },
+  "dramaticBoomer": {
+   "file": "dramatic-boomer.wav",
+   "duration": 1.33,
+   "peak_db": -3.0,
+   "mean_db": -17.5,
+   "thirds_db": [
+    -12.9,
+    -26.0,
+    -40.8
+   ],
+   "attack": "удар",
+   "category": "акцент"
+  },
+  "fah": {
+   "file": "fah.wav",
+   "duration": 1.93,
+   "peak_db": -3.0,
+   "mean_db": -10.6,
+   "thirds_db": [
+    -9.0,
+    -9.6,
+    -15.8
+   ],
+   "attack": "удар",
+   "category": "акцент"
+  },
+  "illuminatiConfirmed": {
+   "file": "illuminati-confirmed.wav",
+   "duration": 7.84,
+   "peak_db": -3.0,
+   "mean_db": -18.8,
+   "thirds_db": [
+    -17.4,
+    -19.9,
+    -19.4
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "loadingLag": {
+   "file": "loading-lag.wav",
+   "duration": 2.69,
+   "peak_db": -3.0,
+   "mean_db": -13.9,
+   "thirds_db": [
+    -13.8,
+    -13.4,
+    -14.5
+   ],
+   "attack": "ровный",
+   "category": "рабочий"
+  },
+  "macQuack": {
+   "file": "mac-quack.wav",
+   "duration": 0.35,
+   "peak_db": -3.0,
+   "mean_db": -17.5,
+   "thirds_db": [
+    -91.0,
+    -13.9,
+    -18.9
+   ],
+   "attack": "нарастание",
+   "category": "рабочий"
+  },
+  "minecraftHurt": {
+   "file": "minecraft-hurt.wav",
+   "duration": 0.37,
+   "peak_db": -3.0,
+   "mean_db": -17.5,
+   "thirds_db": [
+    -22.9,
+    -13.4,
+    -27.2
+   ],
+   "attack": "горб",
+   "category": "акцент"
+  },
+  "mouseClick": {
+   "file": "mouse-click.wav",
+   "duration": 0.4,
+   "peak_db": -3.0,
+   "mean_db": -31.6,
+   "thirds_db": [
+    -31.5,
+    -28.6,
+    -87.3
+   ],
+   "attack": "горб",
+   "category": "рабочий"
+  },
+  "nellyAhh": {
+   "file": "nelly-ahh.wav",
+   "duration": 1.46,
+   "peak_db": -3.0,
+   "mean_db": -21.1,
+   "thirds_db": [
+    -16.9,
+    -25.6,
+    -91.0
+   ],
+   "attack": "удар",
+   "category": "акцент"
+  },
+  "ohMyGodVine": {
+   "file": "oh-my-god-vine.wav",
+   "duration": 1.62,
+   "peak_db": -3.0,
+   "mean_db": -10.9,
+   "thirds_db": [
+    -8.5,
+    -12.2,
+    -13.7
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "omgHellNah": {
+   "file": "omg-hell-nah.wav",
+   "duration": 4.4,
+   "peak_db": -3.0,
+   "mean_db": -17.1,
+   "thirds_db": [
+    -25.5,
+    -15.5,
+    -15.6
+   ],
+   "attack": "нарастание",
+   "category": "джингл"
+  },
+  "pageTurn": {
+   "file": "page-turn.wav",
+   "duration": 0.4,
+   "peak_db": -3.0,
+   "mean_db": -21.8,
+   "thirds_db": [
+    -25.6,
+    -17.8,
+    -32.0
+   ],
+   "attack": "горб",
+   "category": "рабочий"
+  },
+  "priceIsRightFail": {
+   "file": "price-is-right-fail.wav",
+   "duration": 4.52,
+   "peak_db": -3.0,
+   "mean_db": -12.3,
+   "thirds_db": [
+    -14.0,
+    -10.7,
+    -13.0
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "recordScratch": {
+   "file": "record-scratch.wav",
+   "duration": 1.26,
+   "peak_db": -3.0,
+   "mean_db": -13.2,
+   "thirds_db": [
+    -11.7,
+    -11.2,
+    -32.9
+   ],
+   "attack": "горб",
+   "category": "акцент"
+  },
+  "romanceMeme": {
+   "file": "romance-meme.wav",
+   "duration": 5.81,
+   "peak_db": -3.0,
+   "mean_db": -19.9,
+   "thirds_db": [
+    -19.4,
+    -20.8,
+    -19.6
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "sanctuaryGuardianWhat": {
+   "file": "sanctuary-guardian-what.wav",
+   "duration": 9.01,
+   "peak_db": -3.0,
+   "mean_db": -20.7,
+   "thirds_db": [
+    -20.2,
+    -20.5,
+    -21.5
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "shutterModern": {
+   "file": "shutter-modern.wav",
+   "duration": 0.49,
+   "peak_db": -3.0,
+   "mean_db": -32.6,
+   "thirds_db": [
+    -49.1,
+    -28.2,
+    -39.7
+   ],
+   "attack": "нарастание",
+   "category": "рабочий"
+  },
+  "shutterOld": {
+   "file": "shutter-old.wav",
+   "duration": 0.31,
+   "peak_db": -3.0,
+   "mean_db": -28.8,
+   "thirds_db": [
+    -28.1,
+    -26.1,
+    -63.2
+   ],
+   "attack": "горб",
+   "category": "рабочий"
+  },
+  "skedaddle": {
+   "file": "skedaddle.wav",
+   "duration": 6.55,
+   "peak_db": -3.0,
+   "mean_db": -17.2,
+   "thirds_db": [
+    -17.5,
+    -17.1,
+    -17.1
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "snapchatNotification": {
+   "file": "snapchat-notification.wav",
+   "duration": 0.22,
+   "peak_db": -3.0,
+   "mean_db": -17.5,
+   "thirds_db": [
+    -18.2,
+    -17.0,
+    -17.4
+   ],
+   "attack": "ровный",
+   "category": "рабочий"
+  },
+  "spongebobFail": {
+   "file": "spongebob-fail.wav",
+   "duration": 3.38,
+   "peak_db": -3.0,
+   "mean_db": -17.6,
+   "thirds_db": [
+    -14.2,
+    -19.8,
+    -23.8
+   ],
+   "attack": "удар",
+   "category": "джингл"
+  },
+  "triggered": {
+   "file": "triggered.wav",
+   "duration": 0.7,
+   "peak_db": -3.0,
+   "mean_db": -9.1,
+   "thirds_db": [
+    -9.0,
+    -8.8,
+    -9.5
+   ],
+   "attack": "ровный",
+   "category": "акцент"
+  },
+  "uiSwitch": {
+   "file": "switch.wav",
+   "duration": 0.33,
+   "peak_db": -3.0,
+   "mean_db": -31.4,
+   "thirds_db": [
+    -43.2,
+    -26.7,
+    -53.4
+   ],
+   "attack": "горб",
+   "category": "рабочий"
+  },
+  "vineBoom": {
+   "file": "vine-boom.wav",
+   "duration": 1.25,
+   "peak_db": -3.0,
+   "mean_db": -10.9,
+   "thirds_db": [
+    -11.1,
+    -9.5,
+    -12.9
+   ],
+   "attack": "ровный",
+   "category": "акцент"
+  },
+  "whip": {
+   "file": "whip.wav",
+   "duration": 0.17,
+   "peak_db": -3.0,
+   "mean_db": -19.1,
+   "thirds_db": [
+    -14.5,
+    -29.7,
+    -42.9
+   ],
+   "attack": "удар",
+   "category": "рабочий"
+  },
+  "whoosh": {
+   "file": "whoosh.wav",
+   "duration": 0.15,
+   "peak_db": -3.0,
+   "mean_db": -18.6,
+   "thirds_db": [
+    -34.4,
+    -13.9,
+    -34.8
+   ],
+   "attack": "горб",
+   "category": "рабочий"
+  },
+  "wilhelmScream": {
+   "file": "wilhelm-scream.wav",
+   "duration": 2.09,
+   "peak_db": -3.0,
+   "mean_db": -16.6,
+   "thirds_db": [
+    -14.6,
+    -15.0,
+    -60.5
+   ],
+   "attack": "удар",
+   "category": "джингл"
+  },
+  "windowsXpError": {
+   "file": "windows-xp-error.wav",
+   "duration": 0.99,
+   "peak_db": -3.0,
+   "mean_db": -15.6,
+   "thirds_db": [
+    -11.7,
+    -18.2,
+    -35.4
+   ],
+   "attack": "удар",
+   "category": "рабочий"
+  },
+  "yippee": {
+   "file": "yippee.wav",
+   "duration": 2.65,
+   "peak_db": -3.0,
+   "mean_db": -20.9,
+   "thirds_db": [
+    -19.2,
+    -20.2,
+    -25.1
+   ],
+   "attack": "ровный",
+   "category": "джингл"
+  },
+  "riser05": {
+   "file": "riser-05s.wav",
+   "duration": 0.5,
+   "peak_db": -3.0,
+   "mean_db": -13.5,
+   "thirds_db": [
+    -21.8,
+    -13.3,
+    -10.9
+   ],
+   "attack": "нарастание",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "нарастание перед быстрым акцентом; КОНЧАТЬСЯ должен на событии"
+  },
+  "riser1": {
+   "file": "riser-1s.wav",
+   "duration": 1.0,
+   "peak_db": -3.0,
+   "mean_db": -13.8,
+   "thirds_db": [
+    -22.7,
+    -14.3,
+    -10.9
+   ],
+   "attack": "нарастание",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "нарастание перед кульминацией; связка riser → hit"
+  },
+  "riser2": {
+   "file": "riser-2s.wav",
+   "duration": 2.0,
+   "peak_db": -3.0,
+   "mean_db": -13.8,
+   "thirds_db": [
+    -22.9,
+    -14.5,
+    -10.7
+   ],
+   "attack": "нарастание",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "длинное нарастание перед крупным раскрытием"
+  },
+  "popSoft": {
+   "file": "pop-soft.wav",
+   "duration": 0.09,
+   "peak_db": -3.0,
+   "mean_db": -7.9,
+   "thirds_db": [
+    -6.3,
+    -6.9,
+    -13.4
+   ],
+   "attack": "удар",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "мягкое появление элемента, альтернатива uiSwitch"
+  },
+  "tick": {
+   "file": "tick.wav",
+   "duration": 0.03,
+   "peak_db": -3.0,
+   "mean_db": -6.5,
+   "thirds_db": [
+    -4.1,
+    -6.1,
+    -14.6
+   ],
+   "attack": "удар",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "мелкий отсчёт, пункт списка"
+  },
+  "errorSoft": {
+   "file": "error-soft.wav",
+   "duration": 0.32,
+   "peak_db": -3.0,
+   "mean_db": -9.0,
+   "thirds_db": [
+    -10.9,
+    -7.2,
+    -9.6
+   ],
+   "attack": "ровный",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "спокойное «не так» без комизма windows-звука"
+  },
+  "pencil": {
+   "file": "pencil.wav",
+   "duration": 0.64,
+   "peak_db": -3.0,
+   "mean_db": -16.5,
+   "thirds_db": [
+    -16.0,
+    -16.7,
+    -16.9
+   ],
+   "attack": "ровный",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "рукописная пометка rough-notation"
+  },
+  "whooshSoft": {
+   "file": "whoosh-soft.wav",
+   "duration": 0.35,
+   "peak_db": -3.0,
+   "mean_db": -16.3,
+   "thirds_db": [
+    -17.1,
+    -14.0,
+    -19.9
+   ],
+   "attack": "ровный",
+   "category": "синтез",
+   "license": "CC0, синтезировано tools/синтез-звуков.sh",
+   "назначение": "мягкая шторка, негромкое движение"
+  }
+ },
+ "правила": {
+  "note": "Машинная копия таблицы из README.md. Громкости рассчитаны под пики библиотеки (−3 дБFS) и пик голоса Александра (≈ −5 дБFS). Формула для другой записи — в README. Громкость «акцент» — диапазон [мин, макс]: точное значение каждого звука закреплено в «соответствия».",
+  "громкость": {
+   "рабочий": 0.15,
+   "движение": 0.2,
+   "акцент": [
+    0.25,
+    0.3
+   ],
+   "фоновый": 0.08
+  },
+  "соответствия": {
+   "вывод-появление": {
+    "звук": "uiSwitch",
+    "volume": 0.15,
+    "тайминг": "на кадр появления"
+   },
+   "плашка-появление": {
+    "звук": "mouseClick",
+    "volume": 0.15,
+    "тайминг": "на кадр появления"
+   },
+   "склейка-крупности": {
+    "звук": "whip",
+    "volume": 0.2,
+    "тайминг": "на кадр склейки"
+   },
+   "движение-шторка": {
+    "звук": "whoosh",
+    "volume": 0.2,
+    "тайминг": "пик звука на пик движения"
+   },
+   "скриншот": {
+    "звук": "shutterModern",
+    "volume": 0.15,
+    "тайминг": "на кадр появления"
+   },
+   "смена-раздела": {
+    "звук": "pageTurn",
+    "volume": 0.15,
+    "тайминг": "на кадр смены"
+   },
+   "успех": {
+    "звук": "ding",
+    "volume": 0.15,
+    "тайминг": "на кадр события"
+   },
+   "ошибка": {
+    "звук": "errorSoft",
+    "volume": 0.15,
+    "тайминг": "на кадр события"
+   },
+   "уведомление": {
+    "звук": "snapchatNotification",
+    "volume": 0.15,
+    "тайминг": "на кадр события"
+   },
+   "акцент-сильный": {
+    "звук": "vineBoom",
+    "volume": 0.3,
+    "тайминг": "на ударный слог; ≤2 за выпуск"
+   },
+   "обрыв-ирония": {
+    "звук": "recordScratch",
+    "volume": 0.25,
+    "тайминг": "на кадр остановки"
+   },
+   "нарастание-акцент": {
+    "звук": "riser1",
+    "volume": 0.2,
+    "тайминг": "пик в конец: райзер КОНЧАЕТСЯ на событии; не чаще 1–2 раз за выпуск"
+   },
+   "пометка-рукописная": {
+    "звук": "pencil",
+    "volume": 0.15,
+    "тайминг": "на кадр начала дорисовки обводки"
+   }
+  },
+  "запреты": [
+   "плавный наезд камеры — без звука",
+   "исчезновение элемента — без звука",
+   "не больше одного звука в один момент",
+   "не класть звук на слово, которое зритель должен разобрать",
+   "один и тот же звук на один и тот же тип события во всём видео"
+  ]
+ }
+}
