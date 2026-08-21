@@ -19,13 +19,21 @@ if [ -e "$project_dir" ]; then
   exit 1
 fi
 
-mkdir -p "$project_dir"/{src,tools,public/fonts,public/clips,public/sounds,out}
+mkdir -p "$project_dir"/{src,tools,public/fonts,public/clips,public/sounds,public/music,out}
 cp "$repo_dir"/шаблон/src/*.ts "$repo_dir"/шаблон/src/*.tsx "$project_dir/src/"
 cp "$repo_dir"/шаблон/package.json "$repo_dir"/шаблон/tsconfig.json \
    "$repo_dir"/шаблон/remotion.config.ts "$repo_dir"/шаблон/edit-plan.json "$project_dir/"
 cp "$repo_dir"/инструменты/проверка-листа.mjs "$repo_dir"/инструменты/субтитры-из-whisper.mjs \
    "$repo_dir"/инструменты/вырезать-паузы.mjs "$repo_dir"/инструменты/сцены-по-области.py \
-   "$repo_dir"/инструменты/контрольный-лист.py "$project_dir/tools/"
+   "$repo_dir"/инструменты/контрольный-лист.py "$repo_dir"/инструменты/эскизы.mjs \
+   "$repo_dir"/инструменты/паспорт-исходника.mjs "$project_dir/tools/"
+
+# Агенты конвейера и канон жанров — в проект: ИИ-агент ученика подхватит их из
+# папки, в которой работает (project-level агенты Claude Code).
+mkdir -p "$project_dir/.claude/agents" "$project_dir/монтажёр"
+cp "$repo_dir"/агенты/*.md "$project_dir/.claude/agents/"
+cp "$repo_dir"/монтажёр/жанры.json "$project_dir/монтажёр/"
+cp "$repo_dir"/звуки/music/pad-calm.wav "$project_dir/public/music/" 2>/dev/null || true
 
 # Шрифт Oswald — с серверов Google Fonts, лицензия OFL. На рендере в сеть не ходим,
 # поэтому файлы кладутся в проект заранее.
@@ -50,17 +58,40 @@ echo "Ставлю зависимости…"
 
 # Длительность — через ffprobe из пакета Remotion: системный ffmpeg не нужен.
 duration=$(cd "$project_dir" && npx remotion ffprobe -v error -show_entries format=duration -of csv=p=0 public/clips/full.mp4)
+dims=$(cd "$project_dir" && npx remotion ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 public/clips/full.mp4)
 node -e "
 const fs = require('fs');
 const p = process.argv[1];
 const plan = JSON.parse(fs.readFileSync(p, 'utf8'));
 const d = Number(process.argv[2]);
 plan.source = process.argv[3];
+const [w, h] = process.argv[4].split(',').map(Number);
+plan.width = w; plan.height = h;
+// Геометрия шаблона задана для высоты 1080 — масштаб от фактической высоты.
+// Пропуск этого шага = элементы криво лежат на «не том» соотношении сторон.
+const k = h / 1080;
+const м = (x) => Math.round(x * k);
+for (const блок of ['textA', 'textB', 'sub']) {
+  if (!plan.layout[блок]) continue;
+  for (const [кл, з] of Object.entries(plan.layout[блок])) {
+    if (typeof з === 'number' && кл !== 'maxLines') plan.layout[блок][кл] = м(з);
+  }
+}
+if (w < h) {
+  // Вертикаль: масштаб от высоты даёт текст шире кадра — профиль канона
+  // (центральные 75% ширины, зона 60–75% высоты; числа из монтажёр/жанры.json).
+  const кв = h / 1920;
+  const м2 = (x) => Math.round(x * кв);
+  plan.layout.textA = { x: Math.round(w * 0.125), bottom: м2(600), size: м2(68),
+    maxWidth: Math.round(w * 0.75), maxLines: 2, accentSize: м2(88) };
+  plan.layout.sub = { bottom: м2(620), size: м2(48), maxWidth: Math.round(w * 0.75) };
+  console.log('ВЕРТИКАЛЬ: применён профиль канона (числа помечены «уточнить» — проверьте кадрами).');
+}
 plan.modes = [{ mode: 'A', from: 0, to: Math.round(d * 100) / 100,
   note: 'ЗАПОЛНИТЬ по выводу сцены-по-области.py, если в записи есть сплит' }];
 plan.fragments[0].to = Math.round(d * 100) / 100;
 fs.writeFileSync(p, JSON.stringify(plan, null, 2) + '\n');
-" "$project_dir/edit-plan.json" "$duration" "$video"
+" "$project_dir/edit-plan.json" "$duration" "$video" "$dims"
 
 cat <<END
 

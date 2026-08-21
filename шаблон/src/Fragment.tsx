@@ -3,15 +3,21 @@ import {
   AbsoluteFill, OffthreadVideo, Series, staticFile, useCurrentFrame, useVideoConfig,
 } from 'remotion';
 import plan from '../edit-plan.json';
+
+// Выключатели слоёв из листа: эскизы стилей и жанр «чистовик» гасят слои
+// данными, а не правкой кода. Отсутствие раздела = слой включён.
+type Слои = { субтитры?: boolean; выводы?: boolean; звук?: boolean; музыка?: boolean };
+const СЛОИ: Слои = (plan as { layers?: Слои }).layers ?? {};
 import './font';
 import { Blur } from './Blur';
 import { Highlight } from './Highlight';
+import { Music } from './Music';
 import { Sounds } from './Sounds';
 import { Subtitles } from './Subtitles';
 import { Vignette } from './Vignette';
 import { Zoom } from './Zoom';
 import { toFrames } from './layout';
-import { вВыход, вИсходник, сегментыФрагмента } from './trim';
+import { вВыход, вИсходник, выходнаяДлительность, сегментыФрагмента } from './trim';
 import type { Cue, Effect, Fragment as Frag } from './types';
 
 const CUES = plan.cues as unknown as Cue[];
@@ -67,13 +73,19 @@ export const Fragment: React.FC<{ fragment: Frag }> = ({ fragment }) => {
 
       <Vignette />
 
-      <Subtitles сейчас={срс} выхКадр={выхКадр} visible={cues.length === 0} />
+      {СЛОИ.субтитры !== false ? (
+        <Subtitles сейчас={срс} выхКадр={выхКадр} visible={СЛОИ.выводы === false || cues.length === 0} />
+      ) : null}
 
-      {cues.map((c) => (
-        <Highlight key={c.cue.id} cue={c.cue} start={c.start} end={c.end} />
-      ))}
+      {СЛОИ.выводы !== false
+        ? cues.map((c) => <Highlight key={c.cue.id} cue={c.cue} start={c.start} end={c.end} />)
+        : null}
 
-      <Sounds выхКадр={выхКадр} окно={[fragment.from, fragment.to]} />
+      {СЛОИ.звук !== false ? <Sounds выхКадр={выхКадр} окно={[fragment.from, fragment.to]} /> : null}
+
+      {СЛОИ.музыка !== false ? (
+        <Music выходКадров={toFrames(выходнаяДлительность(fragment.from, fragment.to), fps)} />
+      ) : null}
     </AbsoluteFill>
   );
 };
