@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Проверяет монтажный лист по правилам ТЗ до того, как запускать рендер на 20+ минут.
-// Запуск: node проверка-листа.mjs [путь до edit-plan.json]   (по умолчанию ./edit-plan.json)
+// Запуск: node check-plan.mjs [путь до edit-plan.json]   (по умолчанию ./edit-plan.json)
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 

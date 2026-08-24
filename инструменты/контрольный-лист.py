@@ -27,10 +27,16 @@ try:
 except ImportError:
     sys.exit('Нужен Pillow: pip3 install pillow')
 
+# Пути под все три ОС: без своего шрифта подписи времени вырождаются в нечитаемый
+# битмап load_default(), и лист перестаёт помогать искать приватное.
 ШРИФТЫ = [
     '/System/Library/Fonts/Supplemental/Arial Bold.ttf',
     '/System/Library/Fonts/Supplemental/Arial.ttf',
     '/System/Library/Fonts/Helvetica.ttc',
+    'C:/Windows/Fonts/arialbd.ttf',
+    'C:/Windows/Fonts/arial.ttf',
+    '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+    '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
 ]
 
 

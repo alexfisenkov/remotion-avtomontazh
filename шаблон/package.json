@@ -5,7 +5,7 @@
   "description": "Надписи-выводы поверх уже смонтированного видео",
   "scripts": {
     "studio": "remotion studio src/index.ts",
-    "check": "node tools/проверка-листа.mjs",
+    "check": "node tools/check-plan.mjs",
     "render": "remotion render src/index.ts Full out/готово.mp4"
   },
   "dependencies": {

@@ -1,5 +1,8 @@
 # Скиллы для ИИ-агентов
 
+**Человеку достаточно одной фразы агенту: «установи скилл из этого репозитория».**
+Всё ниже — инструкция для самого агента.
+
 Скилл — это плейбук, который агент подхватывает сам, когда задача подходит под его описание.
 Здесь лежит один скилл — «сделай-монтаж» (идентификатор `sdelai-montazh`): он ведёт весь
 конвейер от записи до готового ролика.
@@ -10,7 +13,7 @@
 который скилл ждёт по умолчанию — `~/remotion-avtomontazh`:
 
 ```bash
-git clone https://github.com/alexfisenkov/remotion-avtomontazh.git ~/remotion-avtomontazh
+git clone https://github.com/alexfisenkov/remotion-avtomontazh.git "$HOME/remotion-avtomontazh"
 ```
 
 ## Установка одной командой — любой агент
@@ -20,7 +23,7 @@ git clone https://github.com/alexfisenkov/remotion-avtomontazh.git ~/remotion-av
 ставит скилл каждому:
 
 ```bash
-npx -y skills@latest add ~/remotion-avtomontazh -g -y
+npx -y skills@latest add "$HOME/remotion-avtomontazh" -g -y
 ```
 
 Ставит из вашего клона, в сеть за скиллом не ходит. Если в конце список «Failed to
@@ -34,10 +37,10 @@ install» с парой экзотических агентов — это не 
 
 ```bash
 # Claude Code
-mkdir -p ~/.claude/skills && cp -r ~/remotion-avtomontazh/скиллы/sdelai-montazh ~/.claude/skills/
+mkdir -p ~/.claude/skills && cp -r "$HOME/remotion-avtomontazh/скиллы/sdelai-montazh" ~/.claude/skills/
 
 # Codex
-mkdir -p ~/.codex/skills && cp -r ~/remotion-avtomontazh/скиллы/sdelai-montazh ~/.codex/skills/
+mkdir -p ~/.codex/skills && cp -r "$HOME/remotion-avtomontazh/скиллы/sdelai-montazh" ~/.codex/skills/
 ```
 
 У другого агента — его папка скиллов из документации агента.
@@ -51,4 +54,4 @@ mkdir -p ~/.codex/skills && cp -r ~/remotion-avtomontazh/скиллы/sdelai-mon
 
 В новой сессии агента скажите «сделай монтаж» и дайте путь к записи — скилл должен
 подхватиться сам. Скилл рассчитан на работу из папки проекта, развёрнутого
-`./развернуть-проект.sh` — там уже лежат агенты конвейера, инструменты и канон жанров.
+`node развернуть-проект.mjs` — там уже лежат агенты конвейера, инструменты и канон жанров.
