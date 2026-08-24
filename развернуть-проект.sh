@@ -12,10 +12,14 @@ video="${2:?Укажите путь к исходному видео}"
 command -v node >/dev/null || { echo "Нужен Node.js 20+: https://nodejs.org" >&2; exit 1; }
 command -v npm  >/dev/null || { echo "npm не найден — он ставится вместе с Node.js" >&2; exit 1; }
 case "$project_dir" in
-  *" "*) echo "Путь проекта без пробелов, папки внутри него — латиницей: их читает бандлер" >&2 ;;
+  # Пробел в пути ломает бандлер уже на npm run studio — лучше упасть сейчас,
+  # чем после пяти минут установки зависимостей.
+  *" "*) echo "Путь проекта — без пробелов, латиницей: его читает бандлер. Пример: ~/video/moy-vypusk" >&2; exit 1 ;;
 esac
 if [ -e "$project_dir" ]; then
   echo "Папка $project_dir уже существует — ничего не трогаю." >&2
+  echo "Если это обломок прошлого запуска (сеть оборвалась и т.п.) — удалите её и запустите снова:" >&2
+  echo "  rm -rf \"$project_dir\"" >&2
   exit 1
 fi
 
@@ -26,13 +30,23 @@ cp "$repo_dir"/шаблон/package.json "$repo_dir"/шаблон/tsconfig.json 
 cp "$repo_dir"/инструменты/проверка-листа.mjs "$repo_dir"/инструменты/субтитры-из-whisper.mjs \
    "$repo_dir"/инструменты/вырезать-паузы.mjs "$repo_dir"/инструменты/сцены-по-области.py \
    "$repo_dir"/инструменты/контрольный-лист.py "$repo_dir"/инструменты/эскизы.mjs \
-   "$repo_dir"/инструменты/паспорт-исходника.mjs "$project_dir/tools/"
+   "$repo_dir"/инструменты/паспорт-исходника.mjs \
+   "$repo_dir"/инструменты/проверить-окружение.mjs "$project_dir/tools/"
 
-# Агенты конвейера и канон жанров — в проект: ИИ-агент ученика подхватит их из
-# папки, в которой работает (project-level агенты Claude Code).
+# Агенты конвейера и канон — в проект. Claude Code подхватит .claude/agents/ сам,
+# любой другой агент найдёт те же файлы через AGENTS.md проекта: это обычные плейбуки.
 mkdir -p "$project_dir/.claude/agents" "$project_dir/монтажёр"
 cp "$repo_dir"/агенты/*.md "$project_dir/.claude/agents/"
-cp "$repo_dir"/монтажёр/жанры.json "$project_dir/монтажёр/"
+cp "$repo_dir"/монтажёр/жанры.json "$repo_dir"/монтажёр/правила-текста.md "$project_dir/монтажёр/"
+
+# AGENTS.md — стандарт, который читают Codex, Cursor, Gemini CLI и другие агенты.
+# В проект кладётся копия контракта с указанием, где лежит репозиторий системы.
+{
+  echo "> Репозиторий системы: $repo_dir"
+  echo "> README с порядком работы — там. Плейбуки конвейера — .claude/agents/ этой папки."
+  echo
+  cat "$repo_dir/AGENTS.md"
+} > "$project_dir/AGENTS.md"
 cp "$repo_dir"/звуки/music/pad-calm.wav "$project_dir/public/music/" 2>/dev/null || true
 
 # Шрифт Oswald — с серверов Google Fonts, лицензия OFL. На рендере в сеть не ходим,
@@ -103,3 +117,5 @@ cat <<END
   3. node tools/вырезать-паузы.mjs — вырезание пауз
   4. npm run check && npm run studio
 END
+
+node "$project_dir/tools/проверить-окружение.mjs" || true
