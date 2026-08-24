@@ -16,7 +16,9 @@ AGENTS.md); этот скилл — его исполняемая форма. Р
 ## Предпосылки
 
 Репозиторий remotion-avtomontazh — постоянный актив конвейера; путь по умолчанию —
-`"$HOME/remotion-avtomontazh"`. Нет его там — склонируйте сами, человека не спрашивайте:
+`"$HOME/remotion-avtomontazh"`. Репозиторий уже стоит — сначала обновите его:
+`git pull` в этой папке (система дорабатывается, вчерашний клон мог устареть).
+Нет его там — склонируйте сами, человека не спрашивайте:
 `git clone https://github.com/alexfisenkov/remotion-avtomontazh.git "$HOME/remotion-avtomontazh"`
 (нет git на macOS — скачайте ZIP с codeload.github.com, чтобы не будить диалог Command
 Line Tools; на Windows git ставится `winget install --id Git.Git -e`). Проект

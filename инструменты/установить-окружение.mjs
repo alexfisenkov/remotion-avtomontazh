@@ -20,7 +20,7 @@
 //   node инструменты/установить-окружение.mjs --модель small   # + модель 0,5 ГБ
 
 import {execFileSync, execSync} from 'node:child_process';
-import {existsSync, mkdirSync, statSync, readdirSync} from 'node:fs';
+import {existsSync, mkdirSync, statSync, readdirSync, rmSync, renameSync} from 'node:fs';
 import {homedir} from 'node:os';
 import {join} from 'node:path';
 
@@ -78,6 +78,10 @@ const выполнить = (команда, описание) => {
 const скачать = (url, файл, ожидаемоБайт) => {
   // curl есть на macOS, Windows 10+ и почти любом Linux. -C - докачивает после обрыва.
   if (existsSync(файл) && statSync(файл).size === ожидаемоБайт) { ок(`уже скачан: ${файл}`); return true; }
+  if (ожидаемоБайт && existsSync(файл) && statSync(файл).size > ожидаемоБайт) {
+    внимание(`${файл} больше эталона — битый, удаляю и качаю заново`);
+    rmSync(файл, {force: true});
+  }
   if (!выполнить(`curl -L -C - --fail -o "${файл}" "${url}"`, `скачивание ${url}`)) return false;
   const размер = existsSync(файл) ? statSync(файл).size : 0;
   if (ожидаемоБайт && размер !== ожидаемоБайт) {
@@ -96,7 +100,7 @@ if (висперГотов()) {
   ок('whisper-cli уже стоит');
 } else if (ос === 'darwin') {
   if (!есть('brew')) {
-    провал('нет Homebrew. Поставь его сам: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" — и запусти меня снова');
+    провал('нет Homebrew. Поставь его сам: NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" — macOS один раз спросит пароль пользователя, предупреди человека спокойной фразой (это единственное, что вводит он). Потом запусти меня снова');
   } else {
     выполнить('brew install whisper-cpp', 'установка whisper');
   }
@@ -110,16 +114,26 @@ if (висперГотов()) {
     'https://github.com/ggml-org/whisper.cpp/releases/download/b4938/whisper-bin-x64.zip',
   ];
   let встал = false;
+  const провалыДо = провалы;
   for (const url of базы) {
     if (!скачать(url, zip, 0)) continue;
     if (выполнить(`powershell -NoProfile -Command "Expand-Archive -Force '${zip}' '${папкаВиспера}'"`, 'распаковка whisper')) { встал = true; break; }
   }
-  if (встал && !existsSync(join(папкаВиспера, 'whisper-cli.exe'))) {
-    // В старых сборках бинарь звался main.exe и мог лежать в подпапке Release.
-    внимание('whisper-cli.exe не в корне — найди его в подпапках (возможно, main.exe) и зови полным путём');
+  if (встал) провалы = провалыДо; // запасной URL сработал — неудача первого не в счёт
+  if (встал) {
+    // В архиве бинарь лежит в подпапке Release (проверено на b4938) — переносим
+    // в корень, чтобы путь был один и предсказуемый.
+    const вРелизе = join(папкаВиспера, 'Release', 'whisper-cli.exe');
+    if (!existsSync(join(папкаВиспера, 'whisper-cli.exe')) && existsSync(вРелизе)) {
+      for (const f of readdirSync(join(папкаВиспера, 'Release')))
+        renameSync(join(папкаВиспера, 'Release', f), join(папкаВиспера, f));
+      ок('бинарь и DLL перенесены из Release/ в корень');
+    }
+    if (!existsSync(join(папкаВиспера, 'whisper-cli.exe')))
+      внимание('whisper-cli.exe не найден ни в корне, ни в Release/ — в старых сборках он звался main.exe, поищи в подпапках');
+    внимание(`зови полным путём: ${папкаВиспера}\\whisper-cli.exe`);
+    внимание('ошибка про VCRUNTIME140.dll → winget install Microsoft.VCRedist.2015+.x64 — и повтори');
   }
-  внимание(`зови полным путём: ${папкаВиспера}\\whisper-cli.exe`);
-  внимание('ошибка про VCRUNTIME140.dll → winget install Microsoft.VCRedist.2015+.x64 — и повтори');
 } else {
   const tar = '/tmp/whisper-bin.tar.gz';
   if (скачать('https://github.com/ggml-org/whisper.cpp/releases/download/b4938/whisper-bin-ubuntu-x64.tar.gz', tar, 0)) {
@@ -135,7 +149,8 @@ if (есть('ffmpeg', ['-version'])) {
 } else if (ос === 'darwin') {
   есть('brew') ? выполнить('brew install ffmpeg', 'установка ffmpeg') : провал('нет Homebrew (см. выше)');
 } else if (ос === 'win32') {
-  выполнить('winget install --id Gyan.FFmpeg -e --accept-source-agreements --accept-package-agreements', 'установка ffmpeg');
+  if (!выполнить('winget install --id Gyan.FFmpeg -e --accept-source-agreements --accept-package-agreements', 'установка ffmpeg'))
+    внимание('нет winget (старая Windows)? Запасной путь: скачай статическую сборку https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip, распакуй и зови ffmpeg.exe полным путём');
   внимание('после winget команда видна только новому окну терминала — перезапусти шелл, если ffmpeg не найдётся');
 } else {
   выполнить('sudo apt-get install -y ffmpeg', 'установка ffmpeg');
@@ -148,6 +163,7 @@ let питон = питоны.find((в) => есть(в[0], [...в.slice(1), '--v
 if (!питон) {
   if (ос === 'win32') {
     if (выполнить('winget install --id Python.Python.3.12 -e --accept-source-agreements --accept-package-agreements', 'установка python')) питон = ['py', '-3'];
+    else внимание('нет winget? Запасной путь: тихий установщик python.org — скачай https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe и запусти с флагами /quiet InstallAllUsers=0 PrependPath=1');
   } else if (ос === 'darwin') {
     ок('python3 в macOS есть — если команда не нашлась, что-то нестандартное, разберись сам');
     питон = ['python3'];
@@ -169,11 +185,31 @@ if (питон) {
 // ── модель ───────────────────────────────────────────────────────────────────
 шаг('Модель распознавания');
 mkdirSync(папкаМоделей, {recursive: true});
-const лежит = readdirSync(папкаМоделей).filter((f) => f.startsWith('ggml-') && f.endsWith('.bin'));
-const выбор = флаг('модель');
+// «Модель на месте» — только если размер сходится до байта. 24.08.2026 скептик
+// поймал сценарий: закачка оборвалась на 800 МБ, огрызок лежит в папке, и наивная
+// проверка «файл есть» рапортовала успех — дословный повтор инцидента, ради
+// которого скрипт писали. Недокачанное докачиваем сами, битое удаляем сами.
+const размерОк = (f) => {
+  const м = Object.values(МОДЕЛИ).find((м) => м.файл === f);
+  return м ? statSync(join(папкаМоделей, f)).size === м.байт : null; // null = чужой файл
+};
+const всеБин = readdirSync(папкаМоделей).filter((f) => f.startsWith('ggml-') && f.endsWith('.bin'));
+const целые = всеБин.filter((f) => размерОк(f) === true);
+const чужие = всеБин.filter((f) => размерОк(f) === null);
+const огрызки = всеБин.filter((f) => размерОк(f) === false);
+let выбор = флаг('модель');
+if (!выбор && огрызки.length) {
+  // Известная модель скачана не до конца — докачиваем без вопросов: согласие
+  // человек уже давал, когда закачка начиналась.
+  const имя = огрызки[0];
+  выбор = Object.entries(МОДЕЛИ).find(([, м]) => м.файл === имя)?.[0] ?? null;
+  if (выбор) внимание(`${имя} скачан не до конца — докачиваю`);
+}
 
-if (лежит.length && !выбор) {
-  ок(`модель уже на месте: ${папкаМоделей}/${лежит[0]}`);
+if (целые.length && !выбор) {
+  ок(`модель уже на месте: ${папкаМоделей}/${целые[0]}`);
+} else if (чужие.length && !выбор) {
+  внимание(`в ${папкаМоделей} лежит ${чужие[0]} — файл не из нашего списка, за его целостность не ручаюсь. Проверь его делом (см. «Итог») или скачай проверенную модель флагом --модель`);
 } else if (!выбор) {
   console.log(`
    Модели ещё нет. Скачивание — единственное, о чём надо спросить человека.
@@ -209,6 +245,8 @@ if (лежит.length && !выбор) {
 
 // ── проверка делом ───────────────────────────────────────────────────────────
 шаг('Итог');
+// Успех — это работающий бинарь, а не «zip распаковался»: перепроверяем.
+if (!висперГотов()) провал('whisper-cli так и не запускается — смотри сообщения выше');
 if (провалы) {
   console.error(`\nПровалов: ${провалы}. Чини по сообщениям выше и запускай меня снова — я не трогаю то, что уже стоит.`);
   process.exit(1);
